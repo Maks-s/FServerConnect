@@ -4,7 +4,7 @@ AddCSLuaFile( "cl_init.lua" )
 include('shared.lua')
 
 function ENT:Initialize( )
-	self:SetModel( FSCModel )
+	self:SetModel( FServerConnect.Model )
 	self:SetHullType( HULL_HUMAN )
 	self:SetHullSizeNormal()
 	self:SetNPCState( NPC_STATE_SCRIPT )
@@ -16,8 +16,8 @@ end
 
 util.AddNetworkString("FSC:Ply:OpenMenu")
 
-function ENT:AcceptInput( Name, Activator, Caller )	
-	if Name == "Use" && IsValid( Caller ) && Caller:IsPlayer() then
+function ENT:Use( _, Caller )	
+	if IsValid( Caller ) && Caller:IsPlayer() then
 		net.Start( "FSC:Ply:OpenMenu" )
 		net.Send( Caller )
 	end

@@ -1,3 +1,33 @@
+--[[-------------------------------------------------------------------------
+	Fonts
+---------------------------------------------------------------------------]]
+surface.CreateFont( "FBButtonsFont:0",
+{
+	font = "Lato Light", 
+	size = 36,
+	weight = 250,
+	antialias = true,
+	strikeout = true,
+	additive = true,
+} )
+surface.CreateFont( "FSCPanelFont:20", 
+{
+	font = "Roboto",
+	size = 26,
+	weight = 0,
+	antialias = true,
+	strikeout = true,
+	additive = true,
+})
+surface.CreateFont( "FBNpcPolice", 
+{
+	font = "Lato Light",
+	size = 96,
+	weight = 250,
+	antialias = true,
+	strikeout = true,
+	additive = true,
+})
 
 --[[-------------------------
 	Blur
@@ -33,16 +63,18 @@ net.Receive( "FSC:Ply:OpenMenu", function()
     Base:SetDraggable( false )
     Base:MakePopup()
     Base:Center()
+    local Wilkommen = string.Replace( FServerConnect.WelcomeMSG, "{name}", LocalPlayer():Nick() )
+    local Suggestion = string.Replace( FServerConnect.Suggestion, "{name}", FServerConnect.SecondServerName )
     Base.Paint = function( self, w, h )
-		DrawBlur( self, 1, FSCBlurPower )		
-		draw.SimpleText( FSC_WelcomeMSG .. LocalPlayer():Nick() .. " !", "FSCPanelFont:20", w / 2, 37, color_white, TEXT_ALIGN_CENTER )
-		draw.SimpleText( FSC_Suggestion .. FSC_SecondServerName .. " ?", "FSCPanelFont:20", w / 2, 110, color_white, TEXT_ALIGN_CENTER )
+		DrawBlur( self, 1, FServerConnect.BlurPower )		
+		draw.SimpleText( Wilkommen, "FSCPanelFont:20", w / 2, 37, color_white, TEXT_ALIGN_CENTER )
+		draw.SimpleText( Suggestion, "FSCPanelFont:20", w / 2, 110, color_white, TEXT_ALIGN_CENTER )
     end
 	
     local b1 = vgui.Create( "DButton", Base )
     b1:SetSize( 430, 45 )
 	b1:SetPos( 60, 200 )
-    b1:SetText( "Me connecter à " .. FSC_ServerName )
+    b1:SetText( "Me connecter à " .. FServerConnect.SecondServerName )
     b1:SetFont( "FBButtonsFont:0" )
     b1:SetTextColor( color_white )
 	b1.OnCursorEntered = function( self ) self.hover = true surface.PlaySound("UI/buttonrollover.wav") end
@@ -62,7 +94,7 @@ net.Receive( "FSC:Ply:OpenMenu", function()
 	end	
   	b1.DoClick = function()
 		Base:Remove()
-		LocalPlayer():ConCommand( "connect ".. FSCServerIP ..":" .. FSCPort )
+		LocalPlayer():ConCommand( "connect ".. FServerConnect.ServerIP ..":" .. FServerConnect.Port )
   	end
 	
 	local b2 = vgui.Create( "DButton", Base )
